@@ -42,12 +42,13 @@ export function useColetasDetalhadasPeriodo(periodo: PeriodoKey) {
 
   return useQuery({
     queryKey: ['coletas-relatorio', periodo],
+    enabled: false,
     queryFn: async () => {
       const { data, error } = await supabase
         .from('coletas')
         .select(
           'status, criado_em, coletado_em, endereco_coleta, ' +
-            'cliente:clientes(nome_clinica), tipo_amostra:tipos_amostra(nome), motoboy:funcionarios(profiles(nome_completo))',
+            'cliente:clientes(nome_clinica), tipo_amostra:tipos_amostra(nome), motoboy:funcionarios(profiles!funcionarios_id_fkey(nome_completo))',
         )
         .gte('criado_em', inicio)
         .lte('criado_em', `${fim} 23:59:59`)

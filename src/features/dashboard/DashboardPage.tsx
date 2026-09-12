@@ -11,13 +11,15 @@ import { useColetasDetalhadasPeriodo, useDashboardIndicadores } from './useDashb
 
 export function DashboardPage() {
   const [periodo, setPeriodo] = useState<PeriodoKey>('mes_atual')
+  const [exportando, setExportando] = useState(false)
   const { data: indicadores, isLoading } = useDashboardIndicadores(periodo)
-  const { refetch: refetchColetas, isFetching: exportando } = useColetasDetalhadasPeriodo(periodo)
+  const { refetch: refetchColetas } = useColetasDetalhadasPeriodo(periodo)
   const { config } = useTheme()
   const { notify } = useToast()
 
   async function handleExportarPDF() {
     if (!indicadores) return
+    setExportando(true)
     try {
       const { data: coletas } = await refetchColetas()
       const { gerarRelatorioGerencialPDF } = await import('./pdf/RelatorioGerencialPDF')
@@ -25,6 +27,8 @@ export function DashboardPage() {
       notify('Relatório PDF gerado com sucesso.')
     } catch (err) {
       notify(err instanceof Error ? err.message : 'Erro ao gerar relatório PDF.', 'error')
+    } finally {
+      setExportando(false)
     }
   }
 

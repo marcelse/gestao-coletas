@@ -7,9 +7,9 @@ import type { ColetaDetalhada } from '../../types/domain'
 const SELECT_DETALHADA =
   'id, cliente_id, tipo_amostra_id, endereco_coleta, observacoes, status, origem, motoboy_id, ' +
   'criado_por, atribuido_por, atribuido_em, coletado_em, criado_em, atualizado_em, ' +
-  'cliente:clientes(id, nome_clinica, profiles(nome_completo)), ' +
+  'cliente:clientes(id, nome_clinica, profiles!clientes_id_fkey(nome_completo)), ' +
   'tipo_amostra:tipos_amostra(id, nome), ' +
-  'motoboy:funcionarios(id, profiles(nome_completo))'
+  'motoboy:funcionarios(id, profiles!funcionarios_id_fkey(nome_completo))'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function mapRow(row: any): ColetaDetalhada {
@@ -187,7 +187,7 @@ export function useMotoboysAtivos() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('funcionarios')
-        .select('id, profiles!inner(nome_completo, ativo)')
+        .select('id, profiles!funcionarios_id_fkey!inner(nome_completo, ativo)')
         .eq('perfil', 'MOTOBOY')
         .eq('profiles.ativo', true)
       if (error) throw error
@@ -203,7 +203,7 @@ export function useClientesAtivos() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('clientes')
-        .select('id, nome_clinica, endereco, profiles!inner(ativo)')
+        .select('id, nome_clinica, endereco, profiles!clientes_id_fkey!inner(ativo)')
         .eq('profiles.ativo', true)
       if (error) throw error
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

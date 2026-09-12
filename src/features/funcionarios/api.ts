@@ -31,7 +31,7 @@ export function useFuncionarios() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('funcionarios')
-        .select('id, email, perfil, criado_em, profiles(nome_completo, telefone, ativo)')
+        .select('id, email, perfil, criado_em, profiles!funcionarios_id_fkey(nome_completo, telefone, ativo)')
         .order('criado_em', { ascending: false })
       if (error) throw error
       return (data as unknown as FuncionarioRow[]).map(mapRow)

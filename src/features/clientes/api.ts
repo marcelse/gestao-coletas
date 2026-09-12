@@ -33,7 +33,7 @@ export function useClientes() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('clientes')
-        .select('id, nome_clinica, endereco, telefone, email, criado_em, profiles(nome_completo, ativo)')
+        .select('id, nome_clinica, endereco, telefone, email, criado_em, profiles!clientes_id_fkey(nome_completo, ativo)')
         .order('criado_em', { ascending: false })
       if (error) throw error
       return (data as unknown as ClienteRow[]).map(mapRow)
