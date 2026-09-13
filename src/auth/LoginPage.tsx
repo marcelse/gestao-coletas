@@ -28,7 +28,7 @@ export function LoginPage() {
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({ resolver: zodResolver(schema) })
 
-  if (session && profile) {
+  if (session && profile?.ativo) {
     return <Navigate to={homeRouteFor(profile.perfil)} replace />
   }
 

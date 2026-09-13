@@ -6,7 +6,7 @@ import type { ColetaDetalhada } from '../../types/domain'
 
 const SELECT_DETALHADA =
   'id, cliente_id, tipo_amostra_id, endereco_coleta, observacoes, status, origem, motoboy_id, ' +
-  'criado_por, atribuido_por, atribuido_em, coletado_em, criado_em, atualizado_em, ' +
+  'criado_por, atribuido_por, atribuido_em, coletado_em, motivo_nao_coletado, criado_em, atualizado_em, ' +
   'cliente:clientes(id, nome_clinica, profiles!clientes_id_fkey(nome_completo)), ' +
   'tipo_amostra:tipos_amostra(id, nome), ' +
   'motoboy:funcionarios(id, profiles!funcionarios_id_fkey(nome_completo))'
@@ -55,17 +55,18 @@ export function useMinhasColetas() {
   })
 }
 
-export function useColetasMotoboy(status: 'PENDENTE' | 'COLETADO') {
+export function useColetasMotoboy(status: StatusColeta | StatusColeta[]) {
   const { profile } = useAuth()
+  const statusList = Array.isArray(status) ? status : [status]
   return useQuery({
-    queryKey: ['coletas', 'motoboy', profile?.id, status],
+    queryKey: ['coletas', 'motoboy', profile?.id, statusList],
     enabled: !!profile,
     queryFn: async () => {
       const { data, error } = await supabase
         .from('coletas')
         .select(SELECT_DETALHADA)
         .eq('motoboy_id', profile!.id)
-        .eq('status', status)
+        .in('status', statusList)
         .order('criado_em', { ascending: true })
       if (error) throw error
       return data.map(mapRow)
@@ -163,6 +164,20 @@ export function useMarcarColetado() {
       const { error } = await supabase
         .from('coletas')
         .update({ status: 'COLETADO', coletado_em: new Date().toISOString() })
+        .eq('id', id)
+      if (error) throw error
+    },
+    onSuccess: () => invalidateColetas(queryClient),
+  })
+}
+
+export function useMarcarNaoColetado() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async ({ id, motivo }: { id: string; motivo: string }) => {
+      const { error } = await supabase
+        .from('coletas')
+        .update({ status: 'NAO_COLETADO', motivo_nao_coletado: motivo })
         .eq('id', id)
       if (error) throw error
     },

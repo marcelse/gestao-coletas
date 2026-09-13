@@ -3,7 +3,7 @@
 //   npx supabase gen types typescript --project-id <id> > src/types/database.types.ts
 
 export type PerfilUsuario = 'ADMINISTRADOR' | 'COORDENACAO' | 'MOTOBOY' | 'CLIENTE'
-export type StatusColeta = 'SOLICITADO' | 'PENDENTE' | 'COLETADO' | 'CANCELADO'
+export type StatusColeta = 'SOLICITADO' | 'PENDENTE' | 'COLETADO' | 'NAO_COLETADO' | 'CANCELADO'
 
 type ProfilesRow = {
   id: string
@@ -53,6 +53,7 @@ type ColetasRow = {
   atribuido_por: string | null
   atribuido_em: string | null
   coletado_em: string | null
+  motivo_nao_coletado: string | null
   criado_em: string
   atualizado_em: string
 }

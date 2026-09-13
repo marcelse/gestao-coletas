@@ -3,7 +3,7 @@ import { Table } from '../../components/Table'
 import { useColetasMotoboy } from './api'
 
 export function ColetasMotoboyHistoricoPage() {
-  const { data: coletas, isLoading } = useColetasMotoboy('COLETADO')
+  const { data: coletas, isLoading } = useColetasMotoboy(['COLETADO', 'NAO_COLETADO'])
 
   return (
     <div>
@@ -19,10 +19,17 @@ export function ColetasMotoboyHistoricoPage() {
             { header: 'Cliente', cell: (c) => c.cliente?.nome_clinica ?? '—' },
             { header: 'Endereço', cell: (c) => c.endereco_coleta },
             {
-              header: 'Coletado em',
-              cell: (c) => (c.coletado_em ? new Date(c.coletado_em).toLocaleString('pt-BR') : '—'),
+              header: 'Data',
+              cell: (c) => {
+                const data = c.status === 'COLETADO' ? c.coletado_em : c.atualizado_em
+                return data ? new Date(data).toLocaleString('pt-BR') : '—'
+              },
             },
             { header: 'Status', cell: (c) => <StatusBadge status={c.status} /> },
+            {
+              header: 'Motivo',
+              cell: (c) => c.motivo_nao_coletado ?? '—',
+            },
           ]}
         />
       )}

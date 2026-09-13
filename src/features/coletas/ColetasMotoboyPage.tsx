@@ -1,12 +1,16 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Button } from '../../components/Button'
 import { useToast } from '../../components/Toast'
+import type { ColetaDetalhada } from '../../types/domain'
 import { useColetasMotoboy, useMarcarColetado } from './api'
+import { NaoColetadoModal } from './NaoColetadoModal'
 
 export function ColetasMotoboyPage() {
   const { data: coletas, isLoading } = useColetasMotoboy('PENDENTE')
   const marcarColetado = useMarcarColetado()
   const { notify } = useToast()
+  const [alvoNaoColetado, setAlvoNaoColetado] = useState<ColetaDetalhada | null>(null)
 
   async function handleMarcar(id: string) {
     try {
@@ -38,13 +42,18 @@ export function ColetasMotoboyPage() {
               <span className="text-sm text-slate-600">{c.cliente?.nome_clinica}</span>
               <span className="text-sm text-slate-500">{c.endereco_coleta}</span>
               {c.observacoes && <span className="text-xs text-slate-400">Obs: {c.observacoes}</span>}
-              <Button className="mt-2 self-start" onClick={() => handleMarcar(c.id)}>
-                Marcar como coletado
-              </Button>
+              <div className="mt-2 flex gap-2">
+                <Button onClick={() => handleMarcar(c.id)}>Marcar como coletado</Button>
+                <Button variant="danger" onClick={() => setAlvoNaoColetado(c)}>
+                  Não Coletado
+                </Button>
+              </div>
             </div>
           ))}
         </div>
       )}
+
+      <NaoColetadoModal coleta={alvoNaoColetado} onClose={() => setAlvoNaoColetado(null)} />
     </div>
   )
 }

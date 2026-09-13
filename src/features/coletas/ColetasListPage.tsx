@@ -15,6 +15,7 @@ const FILTROS: { label: string; value: StatusColeta | undefined }[] = [
   { label: 'Solicitado', value: 'SOLICITADO' },
   { label: 'Pendente', value: 'PENDENTE' },
   { label: 'Coletado', value: 'COLETADO' },
+  { label: 'Não Coletado', value: 'NAO_COLETADO' },
   { label: 'Cancelado', value: 'CANCELADO' },
 ]
 
@@ -75,11 +76,12 @@ export function ColetasListPage() {
             { header: 'Endereço', cell: (c) => c.endereco_coleta },
             { header: 'Motoboy', cell: (c) => c.motoboy?.nome_completo ?? '—' },
             { header: 'Status', cell: (c) => <StatusBadge status={c.status} /> },
+            { header: 'Motivo', cell: (c) => c.motivo_nao_coletado ?? '—' },
             {
               header: 'Ações',
               cell: (c) => (
                 <div className="flex gap-2">
-                  {c.status === 'SOLICITADO' && (
+                  {(c.status === 'SOLICITADO' || c.status === 'NAO_COLETADO') && (
                     <button
                       className="text-[var(--color-primary)] hover:underline"
                       onClick={() => setColetaParaAtribuir(c)}
@@ -87,7 +89,7 @@ export function ColetasListPage() {
                       Atribuir
                     </button>
                   )}
-                  {(c.status === 'SOLICITADO' || c.status === 'PENDENTE') && (
+                  {(c.status === 'SOLICITADO' || c.status === 'PENDENTE' || c.status === 'NAO_COLETADO') && (
                     <button
                       className="text-[var(--color-danger)] hover:underline"
                       onClick={() => setColetaParaCancelar(c)}

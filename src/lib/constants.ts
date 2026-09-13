@@ -3,13 +3,14 @@ export type Perfil = (typeof PERFIS)[number]
 
 export const STAFF_PERFIS: Perfil[] = ['ADMINISTRADOR', 'COORDENACAO']
 
-export const STATUS_COLETA = ['SOLICITADO', 'PENDENTE', 'COLETADO', 'CANCELADO'] as const
+export const STATUS_COLETA = ['SOLICITADO', 'PENDENTE', 'COLETADO', 'NAO_COLETADO', 'CANCELADO'] as const
 export type StatusColeta = (typeof STATUS_COLETA)[number]
 
 export const STATUS_LABEL: Record<StatusColeta, string> = {
   SOLICITADO: 'Solicitado',
   PENDENTE: 'Pendente',
   COLETADO: 'Coletado',
+  NAO_COLETADO: 'Não Coletado',
   CANCELADO: 'Cancelado',
 }
 
