@@ -15,6 +15,8 @@ import { FuncionarioFormPage } from '../features/funcionarios/FuncionarioFormPag
 import { FuncionariosListPage } from '../features/funcionarios/FuncionariosListPage'
 import { EditProfileForm } from '../features/perfil/EditProfileForm'
 import { TiposAmostraPage } from '../features/tiposAmostra/TiposAmostraPage'
+import { UsuarioFormPage } from '../features/usuarios/UsuarioFormPage'
+import { UsuariosListPage } from '../features/usuarios/UsuariosListPage'
 import { AppLayout } from '../layout/AppLayout'
 import { RoleHomeRedirect } from './RoleHomeRedirect'
 
@@ -31,6 +33,8 @@ export function AppRoutes() {
 
           <Route element={<RequireAuth roles={['ADMINISTRADOR', 'COORDENACAO']} />}>
             <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/usuarios" element={<UsuariosListPage />} />
+            <Route path="/usuarios/novo" element={<UsuarioFormPage />} />
             <Route path="/funcionarios" element={<FuncionariosListPage />} />
             <Route path="/funcionarios/novo" element={<FuncionarioFormPage />} />
             <Route path="/funcionarios/:id/editar" element={<FuncionarioFormPage />} />
