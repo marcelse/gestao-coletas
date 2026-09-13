@@ -6,6 +6,7 @@ import { Table } from '../../components/Table'
 import { useToast } from '../../components/Toast'
 import { PERFIL_LABEL } from '../../lib/constants'
 import { useToggleUsuarioAtivo, useUsuarios, type Usuario } from './api'
+import { ResetSenhaModal } from './ResetSenhaModal'
 
 export function UsuariosListPage() {
   const { data: usuarios, isLoading } = useUsuarios()
@@ -13,6 +14,7 @@ export function UsuariosListPage() {
   const { notify } = useToast()
   const navigate = useNavigate()
   const [alvo, setAlvo] = useState<Usuario | null>(null)
+  const [alvoSenha, setAlvoSenha] = useState<Usuario | null>(null)
 
   async function confirmarToggle() {
     if (!alvo) return
@@ -66,6 +68,9 @@ export function UsuariosListPage() {
                   >
                     Editar
                   </button>
+                  <button className="text-[var(--color-primary)] hover:underline" onClick={() => setAlvoSenha(u)}>
+                    Alterar Senha
+                  </button>
                   <button
                     className={u.ativo ? 'text-[var(--color-danger)] hover:underline' : 'text-emerald-700 hover:underline'}
                     onClick={() => setAlvo(u)}
@@ -88,6 +93,8 @@ export function UsuariosListPage() {
         onConfirm={confirmarToggle}
         onCancel={() => setAlvo(null)}
       />
+
+      <ResetSenhaModal usuario={alvoSenha} onClose={() => setAlvoSenha(null)} />
     </div>
   )
 }

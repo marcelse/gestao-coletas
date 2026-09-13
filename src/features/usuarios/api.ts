@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useAuth } from '../../auth/useAuth'
 import { supabase } from '../../lib/supabaseClient'
 import type { Perfil } from '../../lib/constants'
 import { useClientes } from '../clientes/api'
@@ -41,6 +42,21 @@ export function useUsuarios() {
     isLoading: funcionarios.isLoading || clientes.isLoading,
     error: funcionarios.error ?? clientes.error,
   }
+}
+
+export function useResetSenhaUsuario() {
+  const { session } = useAuth()
+
+  return useMutation({
+    mutationFn: async ({ user_id, nova_senha }: { user_id: string; nova_senha: string }) => {
+      const { data, error } = await supabase.functions.invoke('reset-user-password', {
+        body: { user_id, nova_senha },
+        headers: { Authorization: `Bearer ${session?.access_token}` },
+      })
+      if (error) throw error
+      return data
+    },
+  })
 }
 
 export function useToggleUsuarioAtivo() {
