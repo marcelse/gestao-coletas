@@ -44,12 +44,9 @@ export function LoginPage() {
     <div className="min-h-full flex items-center justify-center bg-[var(--color-bg)] p-4">
       <div className="w-full max-w-sm bg-white rounded-lg shadow-md p-8">
         <div className="flex flex-col items-center mb-6">
-          {config?.logo_url ? (
+          <span className="font-semibold text-xl text-[var(--color-primary)] mb-2">Gestão de Coletas</span>
+          {config?.logo_url && (
             <img src={config.logo_url} alt="Logomarca" className="h-14 object-contain mb-2" />
-          ) : (
-            <span className="font-semibold text-xl text-[var(--color-primary)] mb-2">
-              Gestão de Coletas
-            </span>
           )}
           <p className="text-sm text-slate-500">Entre com seu usuário e senha</p>
         </div>
