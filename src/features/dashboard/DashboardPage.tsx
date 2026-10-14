@@ -3,8 +3,11 @@ import { Button } from '../../components/Button'
 import { useToast } from '../../components/Toast'
 import { useTheme } from '../../theme/useTheme'
 import { FiltrosPeriodo } from './FiltrosPeriodo'
+import { GraficoEvolucao } from './GraficoEvolucao'
+import { GraficoMotivos } from './GraficoMotivos'
 import { GraficoPorMotoboy } from './GraficoPorMotoboy'
 import { GraficoPorTipo } from './GraficoPorTipo'
+import { GraficoStatus } from './GraficoStatus'
 import { IndicadoresCards } from './IndicadoresCards'
 import type { PeriodoKey } from './periodos'
 import { useColetasDetalhadasPeriodo, useDashboardIndicadores } from './useDashboardQueries'
@@ -48,9 +51,12 @@ export function DashboardPage() {
       ) : (
         <>
           <IndicadoresCards indicadores={indicadores} />
+          <GraficoEvolucao dados={indicadores.evolucao_diaria} />
           <div className="grid gap-4 lg:grid-cols-2">
+            <GraficoStatus dados={indicadores.por_status} />
+            <GraficoPorMotoboy dados={indicadores.por_motoboy} />
             <GraficoPorTipo dados={indicadores.por_tipo} />
-            <GraficoPorMotoboy dados={indicadores.por_motoboy_mes} />
+            <GraficoMotivos dados={indicadores.motivos_nao_coleta} />
           </div>
         </>
       )}
