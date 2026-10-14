@@ -1,20 +1,21 @@
-import { Table } from '../../components/Table'
+import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import { COR_DANGER, COR_PRIMARIA, GraficoCard } from './GraficoCard'
 import type { DashboardIndicadores } from './useDashboardQueries'
 
-export function GraficoPorMotoboy({ dados }: { dados: DashboardIndicadores['por_motoboy_mes'] }) {
+export function GraficoPorMotoboy({ dados }: { dados: DashboardIndicadores['por_motoboy'] }) {
   return (
-    <div className="bg-white border border-slate-200 rounded-lg p-4">
-      <h2 className="text-sm font-semibold text-slate-700 mb-3">Coletas por Motoboy / Mês</h2>
-      <Table
-        rows={dados}
-        rowKey={(d) => `${d.nome_completo}-${d.mes}`}
-        emptyMessage="Sem coletas no período."
-        columns={[
-          { header: 'Motoboy', cell: (d) => d.nome_completo },
-          { header: 'Mês', cell: (d) => d.mes },
-          { header: 'Total', cell: (d) => d.total },
-        ]}
-      />
-    </div>
+    <GraficoCard titulo="Coletadas x Não Coletadas por Motoboy" vazio={dados.length === 0}>
+      <ResponsiveContainer width="100%" height={260}>
+        <BarChart data={dados} margin={{ left: -16, right: 8 }}>
+          <CartesianGrid strokeDasharray="3 3" vertical={false} />
+          <XAxis dataKey="nome_completo" />
+          <YAxis allowDecimals={false} />
+          <Tooltip />
+          <Legend />
+          <Bar dataKey="coletadas" name="Coletadas" fill={COR_PRIMARIA} radius={[4, 4, 0, 0]} />
+          <Bar dataKey="nao_coletadas" name="Não coletadas" fill={COR_DANGER} radius={[4, 4, 0, 0]} />
+        </BarChart>
+      </ResponsiveContainer>
+    </GraficoCard>
   )
 }

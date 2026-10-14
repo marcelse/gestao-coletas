@@ -7,8 +7,16 @@ export interface DashboardIndicadores {
   coletadas_periodo: number
   coletadas_hoje: number
   coletadas_mes: number
+  nao_coletadas_periodo: number
+  nao_coletadas_hoje: number
+  nao_coletadas_mes: number
+  taxa_sucesso_periodo: number | null
+  por_status: { status: string; total: number }[]
   por_tipo: { nome: string; total: number }[]
   por_motoboy_mes: { nome_completo: string; mes: string; total: number }[]
+  por_motoboy: { nome_completo: string; coletadas: number; nao_coletadas: number }[]
+  motivos_nao_coleta: { motivo: string; total: number }[]
+  evolucao_diaria: { dia: string; coletadas: number; nao_coletadas: number; solicitadas: number }[]
 }
 
 export function useDashboardIndicadores(periodo: PeriodoKey) {
